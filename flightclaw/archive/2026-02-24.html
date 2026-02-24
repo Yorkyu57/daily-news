@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Scanner Report — 2026-02-24</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+         max-width: 900px; margin: 0 auto; padding: 20px;
+         background: #f8f9fa; color: #333; }
+  h1 { color: #2c3e50; border-bottom: 2px solid #3498db;
+       padding-bottom: 10px; }
+  .meta { color: #7f8c8d; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0;
+           background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  th, td { padding: 10px 14px; text-align: left;
+            border-bottom: 1px solid #ecf0f1; }
+  th { background: #3498db; color: white; }
+  tr:hover { background: #f0f7fd; }
+  .chart-container { background: white; padding: 20px; margin: 20px 0;
+                      border-radius: 8px;
+                      box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  canvas { max-height: 400px; }
+</style>
+</head>
+<body>
+<h1>Flight Scanner Report</h1>
+<p class="meta">Scan date: 2026-02-24 &middot; 3 route(s)</p>
+
+<h2>Results</h2>
+<table>
+<thead>
+<tr><th>Route</th><th>Departure</th><th>Return</th>
+    <th>Duration</th><th>Price</th><th>Outbound</th><th>Return Flight</th></tr>
+</thead>
+<tbody>
+<tr><td>SIN-TAO</td><td>2026-04-18</td><td>2026-05-07</td><td>19d</td><td>USD 332.0</td><td>MF 8676 1 stop 14h5m</td><td>MF 8536 1 stop 12h30m</td></tr>
+<tr><td>SIN-TAO</td><td>2026-04-08</td><td>2026-04-22</td><td>14d</td><td>USD 367.0</td><td>TR 186 direct 5h50m</td><td>TR 187 direct 6h5m</td></tr>
+<tr><td>SIN-TAO</td><td>2026-04-04</td><td>2026-04-19</td><td>15d</td><td>USD 427.0</td><td>TR 186 direct 6h5m</td><td>TR 187 direct 6h5m</td></tr>
+<tr><td>SIN-TAO</td><td>2026-04-08</td><td>2026-04-25</td><td>17d</td><td>USD 427.0</td><td>TR 186 direct 5h50m</td><td>TR 187 direct 6h5m</td></tr>
+<tr><td>SIN-TAO</td><td>2026-04-14</td><td>2026-04-30</td><td>16d</td><td>USD 442.0</td><td>TR 186 direct 5h50m</td><td>TR 187 direct 6h5m</td></tr>
+<tr><td>SIN-TAO-OW</td><td>2026-03-30</td><td>-</td><td>-</td><td>USD 180.0</td><td>CZ 352 1 stop 11h15m</td><td>-</td></tr>
+<tr><td>SIN-TAO-OW</td><td>2026-03-31</td><td>-</td><td>-</td><td>USD 180.0</td><td>CZ 8490 1 stop 10h50m</td><td>-</td></tr>
+<tr><td>SIN-TAO-OW</td><td>2026-04-04</td><td>-</td><td>-</td><td>USD 180.0</td><td>CZ 8048 1 stop 15h20m</td><td>-</td></tr>
+<tr><td>SIN-TAO-OW</td><td>2026-04-05</td><td>-</td><td>-</td><td>USD 180.0</td><td>MF 866 1 stop 9h0m</td><td>-</td></tr>
+<tr><td>SIN-TAO-OW</td><td>2026-04-09</td><td>-</td><td>-</td><td>USD 180.0</td><td>CZ 8048 1 stop 15h20m</td><td>-</td></tr>
+<tr><td>TAO-SIN-OW</td><td>2026-03-28</td><td>-</td><td>-</td><td>USD 149.0</td><td>HU 7688 2 stop 20h55m</td><td>-</td></tr>
+<tr><td>TAO-SIN-OW</td><td>2026-03-29</td><td>-</td><td>-</td><td>USD 149.0</td><td>ZH 9918 1 stop 11h20m</td><td>-</td></tr>
+<tr><td>TAO-SIN-OW</td><td>2026-03-30</td><td>-</td><td>-</td><td>USD 149.0</td><td>ZH 9918 1 stop 11h20m</td><td>-</td></tr>
+<tr><td>TAO-SIN-OW</td><td>2026-03-31</td><td>-</td><td>-</td><td>USD 149.0</td><td>ZH 9918 1 stop 11h20m</td><td>-</td></tr>
+<tr><td>TAO-SIN-OW</td><td>2026-03-26</td><td>-</td><td>-</td><td>USD 152.0</td><td>CZ 3610 1 stop 16h0m</td><td>-</td></tr>
+</tbody>
+</table>
+
+<h2>Price Trend</h2>
+<div class="chart-container">
+<canvas id="trendChart"></canvas>
+</div>
+
+<script>
+(function() {
+  var chartData = {"labels": ["2026-02-23", "2026-02-24"], "datasets": [{"label": "SIN-TAO", "data": [332.0, 351.0, 332.0, 331.0, 332.0], "borderColor": "#4e79a7", "fill": false}, {"label": "SIN-TAO-OW", "data": [180.0, 180.0], "borderColor": "#f28e2b", "fill": false}, {"label": "TAO-SIN-OW", "data": [149.0, 149.0], "borderColor": "#e15759", "fill": false}]};
+  if (!chartData.labels.length) return;
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: { labels: chartData.labels, datasets: chartData.datasets },
+    options: {
+      responsive: true,
+      plugins: { title: { display: true, text: 'Cheapest Price Trend' } },
+      scales: { y: { beginAtZero: false } }
+    }
+  });
+})();
+</script>
+</body>
+</html>
